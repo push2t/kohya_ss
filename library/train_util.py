@@ -913,6 +913,7 @@ class BaseDataset(torch.utils.data.Dataset):
         images = []
 
         for image_key in bucket[image_index : image_index + bucket_batch_size]:
+#            print("fuck it we ball: %s" % (image_key))
             image_info = self.image_data[image_key]
             subset = self.image_to_subset[image_key]
             loss_weights.append(self.prior_loss_weight if image_info.is_reg else 1.0)
@@ -1090,6 +1091,10 @@ class DreamBoothDataset(BaseDataset):
                     captions.append(subset.class_tokens if cap_for_img is None else cap_for_img)
 
             self.set_tag_frequency(os.path.basename(subset.image_dir), captions)  # タグ頻度を記録
+
+            num_distinct_captions = len(set(captions))
+            if num_distinct_captions < 2:
+                raise ValueError("read no real captions for subset %s, will not proceed" % (subset.image_dir))
 
             return img_paths, captions
 
