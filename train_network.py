@@ -553,9 +553,11 @@ def train(args):
             os.remove(old_ckpt_file)
 
     # training loop
+    import logging
     for epoch in range(num_train_epochs):
         if is_main_process:
             print(f"\nepoch {epoch+1}/{num_train_epochs}")
+            logging.error(f"epoch {epoch+1}/{num_train_epochs}")
         current_epoch.value = epoch + 1
 
         metadata["ss_epoch"] = str(epoch + 1)
